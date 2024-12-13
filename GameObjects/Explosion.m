@@ -17,7 +17,7 @@ static FocoaMod *explosionSound1,*explosionSound2;
 
 +(void)InitAssets {
 
-    explosionSprite = [[[GLSprite alloc] initWithImages:@"data/sprites/explosion/exp" extension:@".jpg" frames: 15]setCoordMode:@"center"];
+    explosionSprite = [[[GLSprite alloc] initWithImages:@"data/sprites/Explosion/exp" extension:@".jpg" frames: 15]setCoordMode:@"center"];
     trailSprite = [[[GLSprite alloc] initWithImages:@"data/sprites/trail/trail" extension:@".jpg" frames: 8] setCoordMode:@"center"];
     dualSprite = [[[GLSprite alloc] initWithImages:@"data/sprites/dual trail/dtrail" extension:@".jpg" frames: 5]setCoordMode:@"center"];
     explosionSound1 = [[FocoaMod alloc] initWithResource:@"data/sounds/Explosion01.mp3" mode:FSOUND_HW3D];

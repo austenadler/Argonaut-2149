@@ -94,7 +94,7 @@ static Game *sharedInstance;
     music[2] = [[FocoaStream alloc] initWithResource:@"data/music/kissmyasteroid.mp3" mode: FSOUND_LOOP_NORMAL];
     music[3] = [[FocoaStream alloc] initWithResource:@"data/music/killco.mp3" mode: FSOUND_LOOP_NORMAL];
 
-    smallFont = [[GLFont alloc] initWithResource:@"data/fonts/Font.tga" xSpacing: 16 ySpacing: 16];
+    smallFont = [[GLFont alloc] initWithResource:@"data/fonts/font.tga" xSpacing: 16 ySpacing: 16];
     bigFont = [[GLFont alloc] initWithResource:@"data/fonts/bigfont.tga" xSpacing: 32 ySpacing: 32];
     
     whooshSound = [[FocoaMod alloc] initWithResource:@"data/sounds/whoosh.wav" mode: FSOUND_2D];
