@@ -756,7 +756,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Argonaut_Prefix.h;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "/Applications/Xcode.app/Contents/Developer//Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-migrator/sdks/MacOSX.sdk/System/Library/Frameworks/Carbon.framework/Versions/A/Headers";
 				INFOPLIST_FILE = "Info-Argonaut__Upgraded_.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/FMOD",
@@ -792,7 +792,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Argonaut_Prefix.h;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "/Applications/Xcode.app/Contents/Developer//Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-migrator/sdks/MacOSX.sdk/System/Library/Frameworks/Carbon.framework/Versions/A/Headers";
 				INFOPLIST_FILE = "Info-Argonaut__Upgraded_.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/FMOD",
@@ -824,7 +824,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Argonaut_Prefix.h;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "/Applications/Xcode.app/Contents/Developer//Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-migrator/sdks/MacOSX.sdk/System/Library/Frameworks/Carbon.framework/Versions/A/Headers";
 				INFOPLIST_FILE = "Info-Argonaut__Upgraded_.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/FMOD",
