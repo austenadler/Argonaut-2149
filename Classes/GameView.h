@@ -28,8 +28,6 @@
 //#import "Loading.h"
 //#import "FrameRate.h"
 
-#import "FocoaMod.h"
-
 
 @interface GameView : NSOpenGLView {
 

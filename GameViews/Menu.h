@@ -17,7 +17,6 @@
 #import "Game.h"
 #import "GLWindow.h"
 #import "Level.h"
-#import "FocoaMod.h"
 
 #import "GLPushButton.h"
 #import "GLListButton.h"
@@ -56,8 +55,6 @@ typedef struct _MenuAsteroid {
     NSPoint inPoint,outPoint1,outPoint2;
     NSRect logoInRect,logoOutRect;
     GLWindow *buttonWindow,*levelWindow,*logoWindow,*aboutWindow,*prefsWindow;
-    FocoaMod *whooshSound;
-    FocoaStream *menuMusic;
     HighScoreWindow *highScoreWindow;
 
 }

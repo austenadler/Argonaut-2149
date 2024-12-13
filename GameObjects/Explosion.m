@@ -11,7 +11,6 @@
 
 static NSMutableSet *sharedSet;
 static GLSprite *explosionSprite,*trailSprite,*dualSprite;
-static FocoaMod *explosionSound1,*explosionSound2;
 
 @implementation Explosion
 
@@ -20,19 +19,12 @@ static FocoaMod *explosionSound1,*explosionSound2;
     explosionSprite = [[[GLSprite alloc] initWithImages:@"data/sprites/Explosion/exp" extension:@".jpg" frames: 15]setCoordMode:@"center"];
     trailSprite = [[[GLSprite alloc] initWithImages:@"data/sprites/trail/trail" extension:@".jpg" frames: 8] setCoordMode:@"center"];
     dualSprite = [[[GLSprite alloc] initWithImages:@"data/sprites/dual trail/dtrail" extension:@".jpg" frames: 5]setCoordMode:@"center"];
-    explosionSound1 = [[FocoaMod alloc] initWithResource:@"data/sounds/Explosion01.mp3" mode:FSOUND_HW3D];
-    [explosionSound1 setMinDistance: 200 maxDistance: 800];
-    explosionSound2 = [[FocoaMod alloc] initWithResource:@"data/sounds/Explosion02.mp3" mode:FSOUND_HW3D];
-    [explosionSound2 setMinDistance: 200 maxDistance: 1000];
-    
 }
 
 +(void)deallocAssets {
 
     [explosionSprite release];
     [trailSprite release];
-    [explosionSound1 release];
-    [explosionSound2 release];
     [sharedSet release];
     sharedSet = nil;
 
@@ -216,13 +208,9 @@ static FocoaMod *explosionSound1,*explosionSound2;
           
         if (newScale > 1){
             
-            [newExplosion fireSound: explosionSound2];
-            [explosionSound2 setVolume: 255 * newScale];
             
         }
         else {
-            [newExplosion fireSound: explosionSound1];
-            [explosionSound1 setVolume: 255 * newScale];
 
         }
 

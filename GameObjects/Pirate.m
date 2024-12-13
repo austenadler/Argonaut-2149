@@ -13,7 +13,6 @@
 #import "Shot.h"
 
 static GLSprite *pirateSprite, *dreadPirateSprite;
-static FocoaMod *shootSound;
 
 @interface Pirate (internalMethods) 
 -(NSPoint)turretLocation:(int)number;
@@ -76,8 +75,6 @@ static FocoaMod *shootSound;
     pirateSprite = [[[GLSprite alloc] initWithSingleImage:@"data/sprites/player2" extension:@".png"] setCoordMode:@"center"];
 	dreadPirateSprite = [[[GLSprite alloc] initWithSingleImage:@"data/sprites/dreadpirate" extension:@".png"] setCoordMode:@"center"];
 
-    shootSound = [[FocoaMod alloc] initWithResource:@"data/sounds/plasma_blast.wav" mode: FSOUND_HW3D];
-    [shootSound setMinDistance: 200 maxDistance: 800];
 
 
 }
@@ -87,7 +84,6 @@ static FocoaMod *shootSound;
     [pirateSprite release];
 	[dreadPirateSprite release];
 
-    [shootSound release];
 
 }
 
@@ -176,8 +172,6 @@ static FocoaMod *shootSound;
 	
 	NSPoint t = [self turretLocation: shotParity];
     timeBeforeShoot = [self reloadTime];
-
-    [self fireSound: shootSound];
 
 	Shot *s = [Shot SpawnFrom: self];
 	[s setLocation: NSMakePoint(pos[0] + t.x, pos[1] + t.y)];

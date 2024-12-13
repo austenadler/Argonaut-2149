@@ -14,7 +14,6 @@
 static GLSprite *missileGraphic,*glowGraphic;
 static Model *bomb;
 static GLTexture *bombTexture;
-FocoaMod *warningSound,*fireSound;
 
 @implementation Missile
 
@@ -93,11 +92,6 @@ FocoaMod *warningSound,*fireSound;
     bombTexture = [GLTexture initWithResource:@"data/models/bomb/bomb.jpg"];
     glowGraphic = [[GLSprite alloc] initWithSingleImage:@"data/models/bomb/glow" extension:@".png"];
     missileGraphic = [[GLSprite alloc] initWithSingleImage:@"data/sprites/missiles/missmal" extension:@".tga"];
-    warningSound = [[FocoaMod alloc] initWithResource:@"data/sounds/warning.wav" mode:FSOUND_HW3D];
-    [warningSound setMinDistance: 400 maxDistance: 1200];//pretty long range (you need to hear this)
-    fireSound = [[FocoaMod alloc] initWithResource:@"data/sounds/missilefire.wav" mode: FSOUND_HW3D];
-    [fireSound setVolume: 50];
-	[fireSound setMinDistance: 400 maxDistance: 800];//pretty long range (you need to hear this)
     [glowGraphic setCoordMode:@"center"];
     [missileGraphic setCoordMode:@"center"];
 
@@ -105,12 +99,10 @@ FocoaMod *warningSound,*fireSound;
 
 +(void)deallocAssets {
     
-    [fireSound release];
     [glowGraphic release];
     [bomb release];
     [bombTexture release];
     [missileGraphic release];
-    [warningSound release];
     
 }
 
@@ -211,8 +203,6 @@ FocoaMod *warningSound,*fireSound;
     newMissile->maxDamage = 10.0;
     newMissile->minRange = 64.0;
     newMissile->maxRange = 110.0;
-
-    [newMissile fireSound:fireSound];
     
     return newMissile;
 
@@ -504,7 +494,6 @@ FocoaMod *warningSound,*fireSound;
 
 -(void)blowUp {
     [Explosion spawnMediumAtPoint:[self NSPointPosRep]];
-    [warningSound stop];
 }
 
 
