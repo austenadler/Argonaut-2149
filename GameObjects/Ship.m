@@ -17,7 +17,10 @@
 
 static NSMutableArray *sharedSet;
 
+static FocoaMod *gatheredCrystalSound,*gatheredPowerupSound,*activateSound,*deactivateSound;
+
 static BOOL needsDataResend = YES;
+static FocoaMod *shootSound;
 static GLSprite *glob;
 
 @implementation Ship
@@ -82,6 +85,11 @@ static GLSprite *glob;
 
 +(void)initAssets {
  
+    gatheredCrystalSound=[[FocoaMod alloc]initWithResource:@"data/sounds/gatheredCrystal.wav" mode:FSOUND_2D];
+    gatheredPowerupSound=[[FocoaMod alloc] initWithResource:@"data/sounds/gatheredPowerup.wav" mode:FSOUND_2D];
+    activateSound = [[FocoaMod alloc] initWithResource:@"data/sounds/activate.wav" mode:FSOUND_2D];
+    deactivateSound = [[FocoaMod alloc] initWithResource:@"data/sounds/deactivate.wav" mode:FSOUND_2D];
+	shootSound = [[FocoaMod alloc] initWithResource:@"data/sounds/plasma_blast.wav" mode: FSOUND_HW3D];
 	glob = [[GLSprite alloc] initWithSingleImage:@"data/sprites/glob" extension:@".png"];
 	
 }
@@ -93,6 +101,13 @@ static GLSprite *glob;
 	//[shootSound release];
 	//[glob release];
     sharedSet = nil;
+    if (gatheredCrystalSound && gatheredPowerupSound && activateSound && deactivateSound){
+        [gatheredCrystalSound release];
+        [gatheredPowerupSound release];
+        [activateSound release];
+        [deactivateSound release];
+        gatheredCrystalSound=gatheredPowerupSound=activateSound=deactivateSound=nil;
+    }
 }
 
 +(void)makeAll {
@@ -445,6 +460,7 @@ static GLSprite *glob;
 	
 		Crystal *sel = (Crystal *)[a objectAtIndex:i];
         if ([sel collideWithObject: self]){
+            if (control != CONTROL_COMPUTER) [sel fireSound: gatheredCrystalSound];
 			[[Crystal sharedSet] removeObject: sel];
             crystals++;
         }
@@ -467,6 +483,7 @@ static GLSprite *glob;
 
 -(void)gatherPowerupOfType:(NSString *)type {
 
+    if (control != CONTROL_COMPUTER) [self fireSound: gatheredPowerupSound];
     
     if ([type isEqual:@"Shield Charge"]){
         shields+=2;
@@ -746,16 +763,20 @@ float angleBetweenVectors(NSPoint a, NSPoint b) {
             if ([selectedPowerupName isEqual:@"Crystal Magnet"]){
                 crystalMagnetOn = -crystalMagnetOn+1;
                 if (crystalMagnetOn){
+				   if (control != CONTROL_COMPUTER) [self fireSound: activateSound];				
                 }
                 else {
+					if (control != CONTROL_COMPUTER) [self fireSound: deactivateSound];
                 }
                 return;
             }
 			if ([selectedPowerupName isEqual:@"Auto-Zapper"]){
                 autoZapperOn = !autoZapperOn;
                 if (autoZapperOn){
+				   if (control != CONTROL_COMPUTER) [self fireSound: activateSound];				
                 }
                 else {
+					if (control != CONTROL_COMPUTER) [self fireSound: deactivateSound];
                 }
                 return;
             }
@@ -796,6 +817,7 @@ float angleBetweenVectors(NSPoint a, NSPoint b) {
     }
     if ([type isEqual:@"Shield Restore"]){
         
+        [activateSound play];
         shields = [self maxShields];
         return TRUE;
     }
@@ -982,6 +1004,7 @@ float angleBetweenVectors(NSPoint a, NSPoint b) {
 			}
 			rot = oldRot;
 			
+			[self fireSound: shootSound];
 			[[Shot sharedSet] addObject: newShot];
 			[newShot release];
 			timeSinceAutoZap = 0.0;

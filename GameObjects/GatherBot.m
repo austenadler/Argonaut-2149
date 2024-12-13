@@ -11,6 +11,7 @@
 #import <Explosion.h>
 
 static GLSprite *shipSprite;
+static FocoaMod *thrustSound;
 
 @implementation GatherBot
 
@@ -44,11 +45,14 @@ static GLSprite *shipSprite;
 +(void)InitAssets {
 
     shipSprite = [[[GLSprite alloc] initWithSingleImage:@"data/sprites/prototype" extension:@".png"]setCoordMode:@"center"];
+    thrustSound = [[FocoaMod alloc] initWithResource:@"data/sounds/gamer_thrust.wav" mode: FSOUND_HW3D];
+    [thrustSound setMinDistance: 200 maxDistance: 800];
 }
 
 +(void)deallocAssets {
     
     [shipSprite release];
+    [thrustSound release];
 
 }
 
@@ -131,6 +135,9 @@ static GLSprite *shipSprite;
 -(void)accelerate {
 
     [super accelerate];
+    if (!FSOUND_IsPlaying([thrustSound channel])){
+        [self fireSound: thrustSound];
+    }
         
     float randomx = (float)[Randomness randomFloat: 0 max: 4]-2;
     float randomy = (float)[Randomness randomFloat: 0 max: 4]-2;

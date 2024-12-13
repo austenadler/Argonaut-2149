@@ -216,6 +216,24 @@ BOOL sphereCollision(float x1, float y1, float r1, float x2, float y2, float r2)
 
 -(void)setToListeningPoint {
 
+    [FocoaMod setListenerXPos: pos[0]
+        yPos: pos[1]
+        zPos: 0.0
+        xVel: vel[0]//*60
+        yVel: vel[1]//*60
+        zVel: 0.0
+        rotation: 90];
+
+}
+
+-(void)fireSound:(FocoaMod *)sound {
+
+   [sound playExtendedWithXpos:pos[0]
+        yPos:pos[1]
+        zPos:0
+        xvel:vel[0]//*60
+        yvel:vel[1]//*60
+        zvel:0.0];
 
 }
 

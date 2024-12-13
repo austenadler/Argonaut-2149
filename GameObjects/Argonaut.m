@@ -13,6 +13,7 @@
 #import <Shot.h>
 
 static GLSprite *argonautSpritePlayer, *argonautSpriteCPU;
+static FocoaMod *shootSound;
 
 @implementation Argonaut
 
@@ -65,6 +66,8 @@ static GLSprite *argonautSpritePlayer, *argonautSpriteCPU;
     //don't load the assets if they're already loaded!f
     argonautSpritePlayer = [[[GLSprite alloc] initWithSingleImage:@"data/sprites/player" extension:@".png"] setCoordMode:@"center"];
 	argonautSpriteCPU = [[[GLSprite alloc] initWithSingleImage:@"data/sprites/friend" extension:@".png"] setCoordMode:@"center"];
+	shootSound = [[FocoaMod alloc] initWithResource:@"data/sounds/plasma_blast.wav" mode: FSOUND_HW3D];
+    [shootSound setMinDistance: 200 maxDistance: 800];
 
 }
 
@@ -72,6 +75,7 @@ static GLSprite *argonautSpritePlayer, *argonautSpriteCPU;
 
     [argonautSpritePlayer release];
 	[argonautSpriteCPU release];
+    [shootSound release];
 
 }
 
@@ -184,6 +188,7 @@ static GLSprite *argonautSpritePlayer, *argonautSpriteCPU;
     Shot *shot = [Shot SpawnFrom: self];
     timeBeforeShoot = [self reloadTime];
 
+    [self fireSound: shootSound];
 
 	shotParity = !shotParity;
 	NSPoint t = [self turretLocation: shotParity];

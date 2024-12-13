@@ -44,6 +44,7 @@ static Loading *loader;
     
     //NSLog(@"Rect size x = %f size y = %f", [[NSScreen mainScreen] frame].size.width, [[NSScreen mainScreen] frame].size.height);
     
+    [FocoaMod update3DSound];//WOAH, you only need to do this during the game, otherwise, sound = 1d
     [self flush];
         
 }
@@ -97,7 +98,11 @@ postNotificationName:@"KeyDown" object: theEvent];
     glEnable(GL_TEXTURE_2D);
     glShadeModel(GL_SMOOTH);
     glEnable(GL_LINE_SMOOTH);  
-        
+    
+    [FocoaMod initFMODWithMixRate: 44100 mixChannels: 32 flags: 0];
+    [FocoaMod setDopplerFactor: 3.0]; //exagerate the doppler effect
+    [FocoaMod setDistanceFactor: 3.0];
+    
     //Some game stuff
     
     Menu *newMenu =  [Menu new];

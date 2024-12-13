@@ -89,8 +89,15 @@ static Game *sharedInstance;
     
     lives = 3; //should be 3
     
+    music[0] = [[FocoaStream alloc] initWithResource:@"data/music/craterDust.mp3" mode: FSOUND_LOOP_NORMAL];
+    music[1] = [[FocoaStream alloc] initWithResource:@"data/music/goldencity.mp3" mode: FSOUND_LOOP_NORMAL];
+    music[2] = [[FocoaStream alloc] initWithResource:@"data/music/kissmyasteroid.mp3" mode: FSOUND_LOOP_NORMAL];
+    music[3] = [[FocoaStream alloc] initWithResource:@"data/music/killco.mp3" mode: FSOUND_LOOP_NORMAL];
+
     smallFont = [[GLFont alloc] initWithResource:@"data/fonts/font.tga" xSpacing: 16 ySpacing: 16];
     bigFont = [[GLFont alloc] initWithResource:@"data/fonts/bigfont.tga" xSpacing: 32 ySpacing: 32];
+    
+    whooshSound = [[FocoaMod alloc] initWithResource:@"data/sounds/whoosh.wav" mode: FSOUND_2D];
     
     //load the hud
     
@@ -234,12 +241,58 @@ static Game *sharedInstance;
 }
 
 -(void)playTrack:(int)_newTrackIndex {
+    
+    newTrackIndex = _newTrackIndex;
+    
+    if (![music[_newTrackIndex] isPlaying]){
+        fadingDown = YES;
+        //NSLog(@"Play track %d",newTrackIndex);
+    }
 }
 
 -(void)fadeMusic {
+    fadingDown = YES;
 }
 
 -(void)handleMusic {
+    
+    if (freq < destFreq-300){
+        freq += (int)(500*FRAME);
+    }
+    if (freq > destFreq+300){
+        freq -= (int)(500*FRAME);
+    }
+    if (playingIndex >= 0 && playingIndex < NUMBER_OF_TRACKS){
+        if ([music[playingIndex] isPlaying]){
+            [music[playingIndex] setFrequency: freq ];   
+        }
+    }
+    
+    if (fadingDown){
+        musicVolume -= (FRAME*2.0f); //about a 2 second fade
+        if (playingIndex >= 0 && playingIndex < NUMBER_OF_TRACKS){
+            if ([music[playingIndex] isPlaying]){
+                [music[playingIndex] setVolume: musicVolume ];
+            }
+        }
+        if (musicVolume <= 0){
+            if (playingIndex >= 0 && playingIndex < NUMBER_OF_TRACKS){
+                if ([music[playingIndex] isPlaying]){
+                    //NSLog(@"stop old track");
+                    [music[playingIndex] stop];
+                }
+            }
+            if (newTrackIndex >= 0 && newTrackIndex < NUMBER_OF_TRACKS){
+                //NSLog(@"Play new track");
+                [music[newTrackIndex] play];
+            }
+            playingIndex = newTrackIndex;
+            newTrackIndex = NONE_PLAYING;
+            musicPlaying = YES;
+            musicVolume = 255;
+            fadingDown = NO;
+        }
+    }
 }
 
 -(void)zoomHighScoreWindowOut:(NSNotification *)aNotification {
@@ -252,6 +305,7 @@ static Game *sharedInstance;
 
     //NSLog(@"Game detects level beaten");
     nextLevelTime = 200;
+    [self fadeMusic];
 }
 
 -(void)playerDied:(NSNotification *)aNotification {
@@ -314,12 +368,14 @@ static Game *sharedInstance;
 -(void)zoomHUDWindowOut {
     [radarWindow zoomToPointAndHide: radarOutPoint];
     [HUDWindow zoomToPointAndHide: outPoint];
+    [whooshSound play];
 }
 
 -(void)zoomHUDWindowIn {
 
     [HUDWindow zoomToPoint: inPoint];
     [radarWindow zoomToPoint: radarInPoint];
+    [whooshSound play];
 
 }
 
@@ -363,6 +419,7 @@ static Game *sharedInstance;
 -(void)endGame {
 	
     [self closePauseMenu]; //make sure the pause window isn't open, this looks bad!
+    [self slowMusic];
     if (playerShip) { //if the player is actually alive (this happens when the player aborts the game) transfer its control to the computer
         [playerShip setControlComputer];
         playerShip = nil;
@@ -375,6 +432,10 @@ static Game *sharedInstance;
     else {
         [self showScores];
     }
+}
+
+-(void)slowMusic {
+    destFreq = 22000;
 }
 
 -(void)doRadar {
@@ -583,8 +644,13 @@ static Game *sharedInstance;
     [Explosion deallocAssets];
     [Particle deallocAssets];
     
+	[whooshSound stop];
 	//[whooshSound release];
 	
+	for (i=0;i<NUMBER_OF_TRACKS;i++){
+		[music[i] stop];
+		//[music[i] release];
+    }
         
     [[NSNotificationCenter defaultCenter] removeObserver: self name: nil object: nil];
 
@@ -609,7 +675,9 @@ static Game *sharedInstance;
     //playerShip = [Ship shipOfNetID:netID];
     
     if (playerShip) [playerShip setToListeningPoint];
-            
+    
+    [self handleMusic];
+        
     if (![weaponStoreWindow shouldDisplay]){
     
         [view viewPixel];
@@ -1057,7 +1125,7 @@ postNotificationName:@"GameShouldUnPause" object: nil];
 
 -(void)saveGame {
  
-    NSString *saveDirectory = [@"~/Library/Application Support/Argonaut/" stringByExpandingTildeInPath];
+    NSString *saveDirectory = [[NSString stringWithString:@"~/Library/Application Support/Argonaut/"] stringByExpandingTildeInPath];
         
     NSArray *directoryContents = [[NSFileManager defaultManager] directoryContentsAtPath: saveDirectory];
     

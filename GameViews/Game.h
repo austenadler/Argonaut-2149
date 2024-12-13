@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <sys/time.h>
 
+#import "FocoaMod.h"
+
 #define NUMBER_OF_MESSAGES_DISPLAYED 3
 
 #define NUMBER_OF_TRACKS 4
@@ -35,7 +37,9 @@
     float planetRotation;
     
     float radarRotation;
-        
+    
+    FocoaStream *music[NUMBER_OF_TRACKS],*whooshSound;
+    
     float titleTextTime,titleTextOpacity;
     
     Level *level;
