@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <OpenGL/gl.h>
-#import <Carbon/carbon.h>
+#import <Carbon.h>
 #import "GLInterfaceObject.h"
 
 #define UP 0
