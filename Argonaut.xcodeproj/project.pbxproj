@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE263EE72D0C91CA001155BD /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE263EE52D0C8A43001155BD /* OpenAL.framework */; };
 		FD33096F0D3AEA7100E4A75C /* argosave.icns in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8884052F057097E300E24307 /* argosave.icns */; };
 		FD3309710D3AEA7100E4A75C /* Argonaut_Prefix.h in Headers */ = {isa = PBXBuildFile; fileRef = 32CA4F630368D1EE00C91783 /* Argonaut_Prefix.h */; };
 		FD3309720D3AEA7100E4A75C /* GameController.h in Headers */ = {isa = PBXBuildFile; fileRef = 8878279304EE17FD00D4E92A /* GameController.h */; };
@@ -237,6 +238,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE263EE72D0C91CA001155BD /* OpenAL.framework in Frameworks */,
 				FD330C620D3AECE500E4A75C /* Cocoa.framework in Frameworks */,
 				FD330C690D3AECFE00E4A75C /* Carbon.framework in Frameworks */,
 				FD330D000D3AED0600E4A75C /* Foundation.framework in Frameworks */,
