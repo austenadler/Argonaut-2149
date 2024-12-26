@@ -7,8 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <Carbon.h>
-
+#import <Carbon/Carbon.h>
 /*fmod files*/
 #import "fmod.h"
 //#import <fmod_errors.h>

@@ -89,7 +89,7 @@ static Game *sharedInstance;
     
     lives = 3; //should be 3
     
-    music[0] = [[FocoaStream alloc] initWithResource:@"data/music/craterDust.mp3" mode: FSOUND_LOOP_NORMAL];
+    music[0] = [[FocoaStream alloc] initWithResource:@"data/music/craterdust.mp3" mode: FSOUND_LOOP_NORMAL];
     music[1] = [[FocoaStream alloc] initWithResource:@"data/music/goldencity.mp3" mode: FSOUND_LOOP_NORMAL];
     music[2] = [[FocoaStream alloc] initWithResource:@"data/music/kissmyasteroid.mp3" mode: FSOUND_LOOP_NORMAL];
     music[3] = [[FocoaStream alloc] initWithResource:@"data/music/killco.mp3" mode: FSOUND_LOOP_NORMAL];
