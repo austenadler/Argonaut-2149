@@ -216,7 +216,7 @@ BOOL sphereCollision(float x1, float y1, float r1, float x2, float y2, float r2)
 
 -(void)setToListeningPoint {
 
-    [FocoaMod setListenerXPos: pos[0]
+    [[CocoAL SharedInstance] setListenerXPos: pos[0]
         yPos: pos[1]
         zPos: 0.0
         xVel: vel[0]//*60
@@ -226,15 +226,8 @@ BOOL sphereCollision(float x1, float y1, float r1, float x2, float y2, float r2)
 
 }
 
--(void)fireSound:(FocoaMod *)sound {
-
-   [sound playExtendedWithXpos:pos[0]
-        yPos:pos[1]
-        zPos:0
-        xvel:vel[0]//*60
-        yvel:vel[1]//*60
-        zvel:0.0];
-
+-(void)fireSound:(CocoALBuffer *)sound {
+    [[CocoAL SharedInstance] playSoundEffectPos:sound xPos:pos[0] yPos:pos[1] zPos:0.0f xvel:vel[0] yvel:vel[1] zvel:0.0f];
 }
 
 -(void)dealloc {

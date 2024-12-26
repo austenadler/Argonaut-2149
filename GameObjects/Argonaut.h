@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CocoAL.h"
 #import "Ship.h"
 
 

@@ -25,8 +25,7 @@ postNotificationName:@"Loading Items" object: [NSNumber numberWithInt: 29]];
     smallButtonSprite = [[GLSprite alloc] initWithImages:@"data/interface/smallButton/button" extension:@".tga" frames: 4];
     
     glEnable(GL_CULL_FACE);
-           
-           
+    
     planetTexture = [GLTexture initWithResource: @"data/textures/planets/forbidden.jpg"];
     
     //the logo is using the GLWindow class for its zooming ability.  This allows the logo to zoom off the screen
@@ -257,8 +256,12 @@ postNotificationName:@"Loading Items" object: [NSNumber numberWithInt: 29]];
     
     
     //the sound effects
-    whooshSound = [[FocoaMod alloc] initWithResource:@"data/sounds/whoosh.wav" mode: FSOUND_2D];
-    menuMusic = [[FocoaStream alloc] initWithResource:@"data/music/title.mp3" mode: FSOUND_LOOP_NORMAL];
+    whooshBuffer = [[CocoAL SharedInstance] genBuffer:[[NSBundle mainBundle] pathForResource:@"data/sounds/whoosh" ofType:@"wav"]];
+    menuMusicBuffer = [[CocoAL SharedInstance] genBuffer:[[NSBundle mainBundle] pathForResource:@"data/music/title" ofType:@"mp3"]];
+
+    menuMusic = [[CocoAL SharedInstance] genSourceWithBuffer:menuMusicBuffer];
+    [menuMusic setLooping:true];
+    [menuMusic set2d];
     
     [[NSNotificationCenter defaultCenter]
         postNotificationName:@"Loading Complete" object: self];
@@ -295,7 +298,7 @@ postNotificationName:@"Loading Items" object: [NSNumber numberWithInt: 29]];
     
     [buttonWindow zoomToPointAndHide: outPoint2];
     [buttonWindow zoomToPoint: inPoint];
-    [whooshSound play];
+    [[CocoAL SharedInstance] playSoundEffect:whooshBuffer];
     
 }
 
@@ -303,8 +306,7 @@ postNotificationName:@"Loading Items" object: [NSNumber numberWithInt: 29]];
  
     [buttonWindow zoomToPointAndHide: outPoint1];
     [levelWindow zoomToPoint: inPoint];
-    [whooshSound play];
-
+    [[CocoAL SharedInstance] playSoundEffect:whooshBuffer];
 }
 
 -(void)showHighScores {
@@ -312,8 +314,7 @@ postNotificationName:@"Loading Items" object: [NSNumber numberWithInt: 29]];
     [buttonWindow zoomToPointAndHide: outPoint1];
     [logoWindow zoomToPointAndHide: logoOutRect.origin];
     [highScoreWindow setShouldDisplay: YES];
-    [whooshSound play];
-
+    [[CocoAL SharedInstance] playSoundEffect:whooshBuffer];
 }
 
 -(void)showAboutWindow {
@@ -321,8 +322,7 @@ postNotificationName:@"Loading Items" object: [NSNumber numberWithInt: 29]];
     [buttonWindow zoomToPointAndHide: outPoint1];
     [logoWindow zoomToPointAndHide: logoOutRect.origin];
     [aboutWindow setShouldDisplay: YES];
-    [whooshSound play];
-
+    [[CocoAL SharedInstance] playSoundEffect:whooshBuffer];
 }
 
 -(void)vote {
@@ -341,31 +341,28 @@ postNotificationName:@"Loading Items" object: [NSNumber numberWithInt: 29]];
     [buttonWindow zoomToPointAndHide: outPoint1];
     [logoWindow zoomToPointAndHide: logoOutRect.origin];
     [prefsWindow setShouldDisplay: YES];
-    [whooshSound play];
-    
+    [[CocoAL SharedInstance] playSoundEffect:whooshBuffer];
 }
 
 -(void)prefsWindowOut:(NSNotification *)aNotification {
     
     [buttonWindow zoomToPoint: inPoint];
     [logoWindow zoomToPoint: logoInRect.origin];
-    [whooshSound play];
-    
+    [[CocoAL SharedInstance] playSoundEffect:whooshBuffer];
 }
 
 -(void)aboutWindowOut:(NSNotification *)aNotification {
 
     [buttonWindow zoomToPoint: inPoint];
     [logoWindow zoomToPoint: logoInRect.origin];
-    [whooshSound play];
-        
+    [[CocoAL SharedInstance] playSoundEffect:whooshBuffer];
 }
 
 -(void)zoomHighScoreWindowOut:(NSNotification *)aNotification {
 
     [buttonWindow zoomToPoint: inPoint];
     [logoWindow zoomToPoint: logoInRect.origin];
-    [whooshSound play];
+    [[CocoAL SharedInstance] playSoundEffect:whooshBuffer];
     
 }
 
@@ -374,7 +371,7 @@ postNotificationName:@"Loading Items" object: [NSNumber numberWithInt: 29]];
     [matrix deselect];
     [levelWindow zoomToPointAndHide: outPoint2];
     [buttonWindow zoomToPoint: inPoint];
-    [whooshSound play];
+    [[CocoAL SharedInstance] playSoundEffect:whooshBuffer];
 
 }
 
@@ -431,7 +428,6 @@ postNotificationName:@"Loading Items" object: [NSNumber numberWithInt: 29]];
 }
 
 -(void)dealloc {
-    
 	[[NSNotificationCenter defaultCenter] removeObserver: self];
 
 	/*GLSprites*/
@@ -478,9 +474,9 @@ postNotificationName:@"Loading Items" object: [NSNumber numberWithInt: 29]];
 	[prefsWindow release];
 	[highScoreWindow release];
 	
-	[whooshSound release];
-	[menuMusic stop];
 	[menuMusic release];
+    [whooshBuffer release];
+    [menuMusicBuffer release];
 
     int n;
     for (n=0;n<MENU_ASTEROIDS;n++){

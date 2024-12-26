@@ -10,7 +10,6 @@
 #import "GameObject.h"
 #import "Randomness.h"
 #import "Model.h"
-#import "FocoaMod.h"
 
 //Some ships
 //#import "GatherBot.h"

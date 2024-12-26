@@ -1,6 +1,6 @@
 Credits
 
-Argonaut - 2149 version 1.2.0
+Argonaut - 2149 version 1.2.2 (Unofficial)
 
 -Programming-
 Holmes Futrell
@@ -10,6 +10,9 @@ Daniel Labriet
     
 -Music-
 Miyaka Cochrane
+
+-64-bit+OpenAL Port-
+Austen Adler
 
 This game was originally entered in
 the uDevGame contest, visit iDevGames.com

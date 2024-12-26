@@ -68,6 +68,7 @@
         [levelStrings addObject:@"Asteroid doAction spawnSmall"];
         [levelStrings addObject:[NSString stringWithFormat:@"wait %d",[Randomness randomInt: 0 max: 1]]];
     }
+    
     for (i=0;i<numberOfMedium;i++){
         [levelStrings addObject:@"Asteroid doAction spawnMedium"];
         [levelStrings addObject:[NSString stringWithFormat:@"wait %d",[Randomness randomInt: 0 max: 2]]];

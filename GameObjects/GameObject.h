@@ -12,7 +12,7 @@
 #import "Randomness.h"
 #import "GLTexture.h"
 #import "Model.h"
-#import "FocoaMod.h"
+#import "CocoAL.h"
 
 #define degreeSine(x) sin((x)*(pi/180.0f))
 #define degreeCosine(x) cos((x)*(pi/180.0f))
@@ -86,7 +86,7 @@ BOOL sphereCollision(float x1, float y1, float r1, float x2, float y2, float r2)
 //sets the object to FMOD's camera point
 -(void)setToListeningPoint;
 //fires sound from objects points with object's velocity
--(void)fireSound:(FocoaMod *)sound;
+-(void)fireSound:(CocoALBuffer *)sound;
 //-(void)setCoordsViewingEdge;
 
 //Is this point visible by the camera?

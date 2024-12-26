@@ -40,6 +40,11 @@
 #import <netinet/in.h>
 #import <arpa/inet.h>
 #import <unistd.h>
+#import <OpenAL/al.h>
+#import <OpenAL/alc.h>
+#include <AudioToolbox/AudioToolbox.h>
+#include <CoreFoundation/CoreFoundation.h>
+#import "CocoAL.h"
 
 #define cheatsEnabled 0
 #define cameraSpeed 20
@@ -73,6 +78,7 @@ static Game *sharedInstance;
 }
 
 -(id)init{
+    NSLog(@"Initializing game.mm");
 
     timeSinceLastPing = 2;
     
@@ -89,15 +95,26 @@ static Game *sharedInstance;
     
     lives = 3; //should be 3
     
-    music[0] = [[FocoaStream alloc] initWithResource:@"data/music/craterDust.mp3" mode: FSOUND_LOOP_NORMAL];
-    music[1] = [[FocoaStream alloc] initWithResource:@"data/music/goldencity.mp3" mode: FSOUND_LOOP_NORMAL];
-    music[2] = [[FocoaStream alloc] initWithResource:@"data/music/kissmyasteroid.mp3" mode: FSOUND_LOOP_NORMAL];
-    music[3] = [[FocoaStream alloc] initWithResource:@"data/music/killco.mp3" mode: FSOUND_LOOP_NORMAL];
+    musicBuffers = [[CocoAL SharedInstance] genBuffers:4 inputFilenames:@[
+       [[NSBundle mainBundle] pathForResource:@"data/music/craterdust" ofType:@"mp3"],
+       [[NSBundle mainBundle] pathForResource:@"data/music/goldencity" ofType:@"mp3"],
+       [[NSBundle mainBundle] pathForResource:@"data/music/kissmyasteroid" ofType:@"mp3"],
+       [[NSBundle mainBundle] pathForResource:@"data/music/killco" ofType:@"mp3"],
+       
+    ]];
+    music = [[CocoAL SharedInstance] genSourcesWithBuffers:4 buffers:musicBuffers];
+    
+    for (int i = 0; i < NUMBER_OF_TRACKS; i++) {
+        [music[i] setLooping:true];
+    }
 
     smallFont = [[GLFont alloc] initWithResource:@"data/fonts/font.tga" xSpacing: 16 ySpacing: 16];
     bigFont = [[GLFont alloc] initWithResource:@"data/fonts/bigfont.tga" xSpacing: 32 ySpacing: 32];
     
-    whooshSound = [[FocoaMod alloc] initWithResource:@"data/sounds/whoosh.wav" mode: FSOUND_2D];
+    whooshSoundBuffer = [[CocoAL SharedInstance] genBuffers:1 inputFilenames:@[[[NSBundle mainBundle] pathForResource:@"data/sounds/whoosh" ofType:@"wav" ]]][0];
+    whooshSound = [[CocoAL SharedInstance] genSourceWithBuffer:whooshSoundBuffer];
+    // 2D sound
+    [whooshSound set2d];
     
     //load the hud
     
@@ -255,39 +272,38 @@ static Game *sharedInstance;
 }
 
 -(void)handleMusic {
-    
     if (freq < destFreq-300){
         freq += (int)(500*FRAME);
     }
     if (freq > destFreq+300){
         freq -= (int)(500*FRAME);
     }
-    if (playingIndex >= 0 && playingIndex < NUMBER_OF_TRACKS){
-        if ([music[playingIndex] isPlaying]){
-            [music[playingIndex] setFrequency: freq ];   
+    if (playingIndex >= 0 && playingIndex < NUMBER_OF_TRACKS){ // We are supposed to be playing music
+        if ([music[playingIndex] isPlaying]){ // We are playing music
+            [music[playingIndex] setFrequency: freq ];
         }
     }
     
-    if (fadingDown){
+    if (fadingDown){ // We are supposed to be fading down
         musicVolume -= (FRAME*2.0f); //about a 2 second fade
-        if (playingIndex >= 0 && playingIndex < NUMBER_OF_TRACKS){
-            if ([music[playingIndex] isPlaying]){
-                [music[playingIndex] setVolume: musicVolume ];
+        if (playingIndex >= 0 && playingIndex < NUMBER_OF_TRACKS){ // We are supposed to be playing music
+            if ([music[playingIndex] isPlaying]){ // We are playing music
+                [music[playingIndex] setVolume: musicVolume ]; // Update the volume
             }
         }
-        if (musicVolume <= 0){
-            if (playingIndex >= 0 && playingIndex < NUMBER_OF_TRACKS){
-                if ([music[playingIndex] isPlaying]){
-                    //NSLog(@"stop old track");
-                    [music[playingIndex] stop];
+        if (musicVolume <= 0){ // We have faded down completely
+            if (playingIndex >= 0 && playingIndex < NUMBER_OF_TRACKS){ // We are supposed to be playing music
+                if ([music[playingIndex] isPlaying]){ // We are playing music
+//                    NSLog(@"stop old track");
+                    [music[playingIndex] stopPlaying];
                 }
             }
-            if (newTrackIndex >= 0 && newTrackIndex < NUMBER_OF_TRACKS){
-                //NSLog(@"Play new track");
+            if (newTrackIndex >= 0 && newTrackIndex < NUMBER_OF_TRACKS){ // We intend to to continue playing music
+//                NSLog(@"Play new track");
                 [music[newTrackIndex] play];
             }
-            playingIndex = newTrackIndex;
-            newTrackIndex = NONE_PLAYING;
+            playingIndex = newTrackIndex; // Play the next song
+            newTrackIndex = NONE_PLAYING; // Stop playing music after this one ? - Probably because this is for the killco music
             musicPlaying = YES;
             musicVolume = 255;
             fadingDown = NO;
@@ -644,14 +660,16 @@ static Game *sharedInstance;
     [Explosion deallocAssets];
     [Particle deallocAssets];
     
-	[whooshSound stop];
+	[whooshSound stopPlaying];
 	//[whooshSound release];
 	
 	for (i=0;i<NUMBER_OF_TRACKS;i++){
-		[music[i] stop];
-		//[music[i] release];
+		[music[i] release];
+        [musicBuffers[i] release];
     }
-        
+    // This array was allocated with malloc
+    free(musicBuffers);
+ 
     [[NSNotificationCenter defaultCenter] removeObserver: self name: nil object: nil];
 
     if (level) [level release];

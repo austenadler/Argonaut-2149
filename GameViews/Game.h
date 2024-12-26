@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <sys/time.h>
+#import <OpenAL/al.h>
 
-#import "FocoaMod.h"
+#import "CocoAL.h"
 
 #define NUMBER_OF_MESSAGES_DISPLAYED 3
 
@@ -37,8 +38,9 @@
     float planetRotation;
     
     float radarRotation;
-    
-    FocoaStream *music[NUMBER_OF_TRACKS],*whooshSound;
+        
+    CocoALBuffer **musicBuffers, *whooshSoundBuffer;
+    CocoALSourceFixed **music, *whooshSound;
     
     float titleTextTime,titleTextOpacity;
     

@@ -14,7 +14,8 @@
 static GLSprite *missileGraphic,*glowGraphic;
 static Model *bomb;
 static GLTexture *bombTexture;
-FocoaMod *warningSound,*fireSound;
+CocoALSourceFixed *warningSound;
+CocoALBuffer *warningSoundBuffer,*fireSoundBuffer;
 
 @implementation Missile
 
@@ -93,24 +94,32 @@ FocoaMod *warningSound,*fireSound;
     bombTexture = [GLTexture initWithResource:@"data/models/bomb/bomb.jpg"];
     glowGraphic = [[GLSprite alloc] initWithSingleImage:@"data/models/bomb/glow" extension:@".png"];
     missileGraphic = [[GLSprite alloc] initWithSingleImage:@"data/sprites/missiles/missmal" extension:@".tga"];
-    warningSound = [[FocoaMod alloc] initWithResource:@"data/sounds/warning.wav" mode:FSOUND_HW3D];
+    
+    warningSoundBuffer = [[CocoAL SharedInstance] genBuffer:[[NSBundle mainBundle] pathForResource:@"data/sounds/warning" ofType:@"wav"]];
+    fireSoundBuffer = [[CocoAL SharedInstance] genBuffer:[[NSBundle mainBundle] pathForResource:@"data/sounds/missilefire" ofType:@"wav"]];
+
+    warningSound = [[CocoAL SharedInstance] genSourceWithBuffer:warningSoundBuffer];
+
+    
     [warningSound setMinDistance: 400 maxDistance: 1200];//pretty long range (you need to hear this)
-    fireSound = [[FocoaMod alloc] initWithResource:@"data/sounds/missilefire.wav" mode: FSOUND_HW3D];
-    [fireSound setVolume: 50];
-	[fireSound setMinDistance: 400 maxDistance: 800];//pretty long range (you need to hear this)
+    // TODO: These missiles do not seem quieter in the original game. I don't understand why they are so quiet in the OpenAL version
+//    [fireSoundBuffer setVolume: 50];
+	[fireSoundBuffer setMinDistance: 400 maxDistance: 800];//pretty long range (you need to hear this)
     [glowGraphic setCoordMode:@"center"];
     [missileGraphic setCoordMode:@"center"];
 
+    // TODO: When does warningSound play? I can't seem to find it in the original sources.
 }
 
 +(void)deallocAssets {
     
-    [fireSound release];
+    [fireSoundBuffer release];
     [glowGraphic release];
     [bomb release];
     [bombTexture release];
     [missileGraphic release];
     [warningSound release];
+    [warningSoundBuffer release];
     
 }
 
@@ -212,7 +221,7 @@ FocoaMod *warningSound,*fireSound;
     newMissile->minRange = 64.0;
     newMissile->maxRange = 110.0;
 
-    [newMissile fireSound:fireSound];
+    [newMissile fireSound:fireSoundBuffer];
     
     return newMissile;
 
@@ -504,7 +513,7 @@ FocoaMod *warningSound,*fireSound;
 
 -(void)blowUp {
     [Explosion spawnMediumAtPoint:[self NSPointPosRep]];
-    [warningSound stop];
+        [warningSound stopPlaying];
 }
 
 

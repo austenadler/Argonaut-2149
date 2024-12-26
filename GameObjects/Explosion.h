@@ -13,7 +13,6 @@
 
     float scale,time;
     GLSprite *sprite;
-    //FocoaMod *explosionSound;
 
 }
 +(id)sharedSet;

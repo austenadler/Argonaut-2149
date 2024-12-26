@@ -17,10 +17,10 @@
 
 static NSMutableArray *sharedSet;
 
-static FocoaMod *gatheredCrystalSound,*gatheredPowerupSound,*activateSound,*deactivateSound;
+static CocoALBuffer *gatheredCrystalSound,*gatheredPowerupSound,*activateSound,*deactivateSound;
 
 static BOOL needsDataResend = YES;
-static FocoaMod *shootSound;
+static CocoALBuffer *shootSound;
 static GLSprite *glob;
 
 @implementation Ship
@@ -84,12 +84,27 @@ static GLSprite *glob;
 }
 
 +(void)initAssets {
- 
-    gatheredCrystalSound=[[FocoaMod alloc]initWithResource:@"data/sounds/gatheredCrystal.wav" mode:FSOUND_2D];
-    gatheredPowerupSound=[[FocoaMod alloc] initWithResource:@"data/sounds/gatheredPowerup.wav" mode:FSOUND_2D];
-    activateSound = [[FocoaMod alloc] initWithResource:@"data/sounds/activate.wav" mode:FSOUND_2D];
-    deactivateSound = [[FocoaMod alloc] initWithResource:@"data/sounds/deactivate.wav" mode:FSOUND_2D];
-	shootSound = [[FocoaMod alloc] initWithResource:@"data/sounds/plasma_blast.wav" mode: FSOUND_HW3D];
+    CocoALBuffer **buffers = [[CocoAL SharedInstance] genBuffers:5 inputFilenames:@[
+      [[NSBundle mainBundle] pathForResource:@"data/sounds/gatheredCrystal" ofType:@"wav"],
+      [[NSBundle mainBundle] pathForResource:@"data/sounds/gatheredPowerup" ofType:@"wav"],
+      [[NSBundle mainBundle] pathForResource:@"data/sounds/activate" ofType:@"wav"],
+      [[NSBundle mainBundle] pathForResource:@"data/sounds/deactivate" ofType:@"wav"],
+      [[NSBundle mainBundle] pathForResource:@"data/sounds/plasma_blast" ofType:@"wav"],
+  ]];
+    
+    gatheredCrystalSound = buffers[0];
+    gatheredPowerupSound = buffers[1];
+    activateSound = buffers[2];
+    deactivateSound = buffers[3];
+    shootSound = buffers[4];
+    // This array was created with malloc
+    free(buffers);
+    
+    [gatheredCrystalSound set2d];
+    [gatheredPowerupSound set2d];
+    [activateSound set2d];
+    [deactivateSound set2d];
+    
 	glob = [[GLSprite alloc] initWithSingleImage:@"data/sprites/glob" extension:@".png"];
 	
 }
@@ -106,6 +121,7 @@ static GLSprite *glob;
         [gatheredPowerupSound release];
         [activateSound release];
         [deactivateSound release];
+        [shootSound release];
         gatheredCrystalSound=gatheredPowerupSound=activateSound=deactivateSound=nil;
     }
 }
@@ -816,8 +832,7 @@ float angleBetweenVectors(NSPoint a, NSPoint b) {
         return TRUE;
     }
     if ([type isEqual:@"Shield Restore"]){
-        
-        [activateSound play];
+        [[CocoAL SharedInstance]playSoundEffect:activateSound];
         shields = [self maxShields];
         return TRUE;
     }
