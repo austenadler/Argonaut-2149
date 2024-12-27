@@ -1,6 +1,6 @@
 Credits
 
-Argonaut - 2149 version 1.2.2 (Unofficial)
+Argonaut - 2149 version 1.2.2
 
 -Programming-
 Holmes Futrell
