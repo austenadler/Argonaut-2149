@@ -2,6 +2,8 @@
 
 This is a fork of the original Argonaut - 2149 game that allows you to play on 64-bit Macs (both Intel and ARM).
 
+If you want to play, you can download it [here](https://github.com/austenadler/Argonaut-2149/releases).
+
 The fork attempts to be 100% true to the game. Only 2 changes were made:
 
 1. Sound was ported from FMOD to OpenAL because there was no 64-bit FMOD library (or at least I couldn't find one)
