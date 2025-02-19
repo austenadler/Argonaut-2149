@@ -232,7 +232,7 @@ CocoAL *cocoAlSharedInstance = nil;
 -(CocoALSourceFixed *)genSource {
     CocoALSourceFixed **sources = [self genSources:1];
     CocoALSourceFixed *source = sources[0];
-    free(source);
+    free(sources);
     return source;
 }
 -(CocoALSourceFixed *)genSourceWithBuffer:(CocoALBuffer *)buffer {
