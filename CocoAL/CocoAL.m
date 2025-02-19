@@ -228,8 +228,12 @@ CocoAL *cocoAlSharedInstance = nil;
     return ret;
 }
 
+// Just generate 1 source at a time, since this is so common throughout the codebase
 -(CocoALSourceFixed *)genSource {
-    return [self genSources:1][0];
+    CocoALSourceFixed **sources = [self genSources:1];
+    CocoALSourceFixed *source = sources[0];
+    free(source);
+    return source;
 }
 -(CocoALSourceFixed *)genSourceWithBuffer:(CocoALBuffer *)buffer {
     CocoALSourceFixed *source = [self genSource];
@@ -287,6 +291,7 @@ CocoAL *cocoAlSharedInstance = nil;
     
     // Open a file with ExtAudioFileOpen()
     err = ExtAudioFileOpenURL(inFileURL, &extRef);
+    CFRelease(inFileURL);
     if(err) {
         printf("MyGetOpenALAudioData: ExtAudioFileOpenURL FAILED, Error = %i/%ld\n", err, err);
         if (extRef) {ExtAudioFileDispose(extRef);}

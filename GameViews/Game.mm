@@ -111,7 +111,8 @@ static Game *sharedInstance;
     smallFont = [[GLFont alloc] initWithResource:@"data/fonts/font.tga" xSpacing: 16 ySpacing: 16];
     bigFont = [[GLFont alloc] initWithResource:@"data/fonts/bigfont.tga" xSpacing: 32 ySpacing: 32];
     
-    whooshSoundBuffer = [[CocoAL SharedInstance] genBuffers:1 inputFilenames:@[[[NSBundle mainBundle] pathForResource:@"data/sounds/whoosh" ofType:@"wav" ]]][0];
+    whooshSoundBuffer = [[CocoAL SharedInstance] genBuffer:[[NSBundle mainBundle] pathForResource:@"data/sounds/whoosh" ofType:@"wav"]];
+
     whooshSound = [[CocoAL SharedInstance] genSourceWithBuffer:whooshSoundBuffer];
     // 2D sound
     [whooshSound set2d];
@@ -661,7 +662,8 @@ static Game *sharedInstance;
     [Particle deallocAssets];
     
 	[whooshSound stopPlaying];
-	//[whooshSound release];
+	[whooshSound release];
+	[whooshSoundBuffer release];
 	
 	for (i=0;i<NUMBER_OF_TRACKS;i++){
 		[music[i] release];
@@ -669,6 +671,7 @@ static Game *sharedInstance;
     }
     // This array was allocated with malloc
     free(musicBuffers);
+    free(music);
  
     [[NSNotificationCenter defaultCenter] removeObserver: self name: nil object: nil];
 
